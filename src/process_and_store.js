@@ -1,4 +1,6 @@
-var clean_xml_tests = function(file){
+
+
+exports.clean_xml_tests = function(file){
     //returns false is the xml file is not valid (missing fields)
     //otherwise returns a cleaned version of the tests
     //valid file constraints:
@@ -32,43 +34,35 @@ var clean_xml_tests = function(file){
     return cleaned_tests;
 };
 
-var update_database = function(file){
-        console.log("Updating database");
-};
 
-var express = require('express'),
-    app = express(),
-    http = require('http'),
-    server = http.createServer(app),
-    xmlparser = require('express-xml-bodyparser');
-
-
-app.use(express.json());
-app.use(express.urlencoded());
-app.use(xmlparser());
-
-app.post('/import', function(req, res, next) {
-    let file = req.body["mcq-test-results"];
-    let processed_file = clean_xml_tests(file);
-    if(processed_file){
-        update_database(file);
-    }
+exports.update_database = function(tests){
+    var MongoClient = require('mongodb').MongoClient;
+    var url = 'mongodb+srv://harry:harry@cluster0-rxnck.mongodb.net/test?retryWrites=true';
+    MongoClient.connect(url, function(err, client){
+        const collection = client.db("stile").collection("tests");
+        for(const test of tests){
+            if (err) throw err;
 
 
-    res.send(file);
-});
+            //check if this student and test has been seen
+            var query = {"test-id" : test["test-id"], "student-number": test["student-number"]};
+            const found = collection.find(query);
+            if(!found){
+                collection.insertOne(test);
+            }
+            else{
+                collection.updateOne({
+                    "test-id": test["test-id"],
+                    "student-number":test["student-number"]
+                }, {
+                    $set: {
+                        "obtained": Math.max(test["obtained"], "obtained")
+                    }
+                });
+            }
+        };
+        
 
-
-app.get('/results/:test_id/aggregate', (req, res) => {
-    let test_id = req.params.test_id;
-    console.log(test_id);
-    res.json({
-        mean: 10,
-        count: 10,
-        p25: 50,
-        p50: 70,
-        p75: 80
+        client.close();
     });
-});
-
-app.listen(3000)
+};
