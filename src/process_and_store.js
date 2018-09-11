@@ -1,5 +1,3 @@
-
-
 exports.clean_xml_tests = function(file){
     //returns false is the xml file is not valid (missing fields)
     //otherwise returns a cleaned version of the tests
@@ -46,23 +44,29 @@ exports.update_database = function(tests){
 
             //check if this student and test has been seen
             var query = {"test-id" : test["test-id"], "student-number": test["student-number"]};
-            const found = collection.find(query);
-            if(!found){
-                collection.insertOne(test);
-            }
-            else{
-                collection.updateOne({
-                    "test-id": test["test-id"],
-                    "student-number":test["student-number"]
-                }, {
-                    $set: {
-                        "obtained": Math.max(test["obtained"], "obtained")
+
+            collection.find(query).toArray()
+                .then(data => {
+
+                    //if has not been seen before then insert
+                    if(data.length == 0){
+                        collection.insertOne(test);
+                    }
+
+                    //if it has been seen then update it
+                    else{
+                        collection.updateOne({
+                            "test-id": test["test-id"],
+                            "student-number":test["student-number"]
+                        }, {
+                            $max: {
+                                "obtained": test["obtained"],
+                                "available": test["available"]
+                            }
+                        });
                     }
                 });
-            }
         };
-        
 
-        client.close();
     });
 };

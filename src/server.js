@@ -33,7 +33,7 @@ app.post('/import', function(req, res, next) {
 //reading from the database and returning the json
 app.get('/results/:test_id/aggregate', (req, res) => {
     let test_id = req.params.test_id;
-    res.json(fetch.get_test_info(test_id));
+    fetch.get_test_info(test_id, res);
 });
 
 app.listen(3000);
