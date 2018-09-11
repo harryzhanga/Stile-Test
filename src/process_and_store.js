@@ -20,8 +20,9 @@ exports.clean_xml_tests = function(file){
             return false;
         }
 
-        let new_test = {};
 
+        //creaating the cleaned test object
+        let new_test = {};
         new_test["student-number"] = parseInt(result["student-number"][0], 10);
         new_test["test-id"] = parseInt(result["test-id"][0], 10);
         new_test["available"] = parseInt(test_info["available"], 10);
@@ -34,16 +35,21 @@ exports.clean_xml_tests = function(file){
 
 
 exports.update_database = function(tests){
+    //this function will update the database with the cleaned_tests given by the clean_xml_tests function
+
+    //connecting to the mongodb
     var MongoClient = require('mongodb').MongoClient;
     var url = 'mongodb+srv://harry:harry@cluster0-rxnck.mongodb.net/test?retryWrites=true';
     MongoClient.connect(url, function(err, client){
         const collection = client.db("stile").collection("tests");
+
+        //for each result that is given
         for(const test of tests){
             if (err) throw err;
 
-
-            //check if this student and test has been seen
+            //we are checking whether this result has already been seen
             var query = {"test-id" : test["test-id"], "student-number": test["student-number"]};
+
 
             collection.find(query).toArray()
                 .then(data => {

@@ -12,8 +12,6 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(xmlparser());
 
-//importing mongodb
-
 //handle posting of the xml file
 app.post('/import', function(req, res, next) {
     let file = req.body["mcq-test-results"];
@@ -22,8 +20,7 @@ app.post('/import', function(req, res, next) {
         process.update_database(processed_file);
         //successful acceptance of the document
         res.sendStatus(200);
-    }
-    else{
+    } else{
         res.status(400);
         res.send("Issue with document fields");
     }

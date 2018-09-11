@@ -66,6 +66,45 @@ You also remember a few other things from your induction week -
 -   Payroll around here is a little strange - they pay you in Coles Myer gift cards instead of actual money for some reason (meta: that means we'll give you a $200 gift card for your time completing this exercise - it's generally easier than giving you actual money because you don't need to wait for payroll, provide us with an ABN/invoice, etc.)
 -   Finally, you've got a lot on at the moment (you're in charge of the GIF Slack channel this week!) so you're going to try and spend about 1-2 hours on this. They _definitely_ don't pay you overtime at Markr.
 
-## So, in conclusion....
+## Key assumptions
+- It is for the quartile responses to be rounded down to the nearest integer
+- If there is no tests for the given test id, then we return an object {"count":0}
+- How we define a valid XML file to keep: it must have the format given in clean_xml_tests (must have student number, test id, summary marks, available, obtained)
+- Each of the relevant fields are integers and are identified as integers
+- A test result is identified by the combination of its test-id and student-number. That is a student cannot sit the same test twice.
+- Accepting other content-type POST is acceptable
 
-Good luck, and get hacking!
+## Approach discussion
+I decided to use nothing but Javascript to build my application. ExpressJS is used as the web server, Postman was used to simulate POST and GET requests with all the relevant headers. I separateed the logic of the program into 3 parts:
+
+server.js : the main file which initiates the server and handles requests
+fetch.js : handles the fetching of data from the database and processing that result
+process_and_store.js : handles the processing of a POST request and stores data into the database
+
+A basic mongoDB instance was created for this (should be free tier) which stores all of the information we need about student results as JSON objects.
+
+## Ways of optimising the reading and writing
+- We can firstly cache results.
+- We can calculate these results during off hours and then return then when required.
+- We can keep a sorted array for the student scores and insert using binary search
+
+
+## Build and run instructions
+First we need the relevant dependencies.
+- install node.js from the web by Google searching for it
+- initiate npm by going to terminal and typing in the command: npm init
+- install express.js by going to the terminal and typing in the command: npm install express --save
+- npm install body-parser --save
+- npm install mongodb -- save
+- npm install express-xml-bodyparser --save
+
+Running the server
+- In the terminal, go to the src directory and type in: node server.js
+- This will start the server.
+
+We also install Postman to simulate the requests
+- Install Postman by going to the website or google searching
+- In Postman, you can simulate a POST or GET request.
+- To simulate incoming information, create a POST request. URL: localhost:3000/import/ and under "Body", modify the "raw" value. Copy and paste in the XML document sample_results.xml
+- To simulate a GET request, change to GET in Postman. Use the URL: localhost:3000/results/9863/aggregate
+- This should return an acceptable response.

@@ -36,6 +36,11 @@ get_statistics = function(arr){
         scores.push(result["obtained"]);
         available = result["available"];
     }
+    if(scores.length === 0){
+        return{
+            "count":0
+        }
+    }
     return({
         "count":arr.length,
         "mean": getMean(scores),
