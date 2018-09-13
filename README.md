@@ -83,6 +83,8 @@ process_and_store.js : handles the processing of a POST request and stores data 
 
 A basic mongoDB instance was created for this (should be free tier) which stores all of the information we need about student results as JSON objects.
 
+I also implemented logging of actions throughout the server which is contained in /src/project.log
+
 ## Ways of optimising the reading and writing
 - We can firstly cache results.
 - We can calculate these results during off hours and then return then when required.
