@@ -1,0 +1,22 @@
+{
+    "name": "stile-test",
+    "version": "1.0.0",
+    "description": "Example API Testing",
+    "author": "Harry Zhang",
+    "scripts": {
+        "test": "mocha"
+    },
+    "dependencies": {
+        "body-parser": "^1.18.3",
+        "body-parser-xml": "^1.1.0",
+        "chai": "^4.1.2",
+        "express": "^4.16.3",
+        "express-xml-bodyparser": "^0.3.0",
+        "mongodb": "^3.1.4",
+        "simple-node-logger": "^0.93.40",
+        "supertest": "^3.3.0"
+    },
+    "devDependencies": {
+        "mocha": "^5.2.0"
+    }
+}

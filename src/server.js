@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: false }));
 
 
 //handle posting of the xml file
-app.post('/import', function(req, res, next) {
+app.post('/import', async function(req, res, next) {
     const content_type = req.headers['content-type'];
     log.info('POST request received of type ', content_type);
     if(content_type !== "text/xml+markr"){
@@ -39,7 +39,7 @@ app.post('/import', function(req, res, next) {
 
     let processed_file = process.clean_xml_tests(file);
     if(processed_file){
-        process.update_database(processed_file);
+        const finished_updating = await process.update_database(processed_file);
         //successful acceptance of the document
         res.sendStatus(200);
         log.info('Request processing');
@@ -57,5 +57,20 @@ app.get('/results/:test_id/aggregate', async (req, res) => {
     log.info('GET request received for aggregate information, test_id = ', test_id);
     fetch.send_test_info(test_id, res);
 });
+
+//deletes the database for testing purpsoes
+app.get('/delete_database', (req, res)=>{
+    log.info("DELETING DATABASE");
+    var MongoClient = require('mongodb').MongoClient;
+    var url = 'mongodb+srv://harry:harry@cluster0-rxnck.mongodb.net/test?retryWrites=true';
+    MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        const collection = client.db("stile").collection("tests");
+        collection.drop(function(err, delOK) {
+          if (delOK) log.info("Collection deleted");
+        });
+    });
+    res.json({Database:"Deleted"});
+});
+
 
 app.listen(3000);

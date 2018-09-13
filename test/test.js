@@ -3,153 +3,177 @@ var should = require('chai').should(),
     supertest = require('supertest'),
     api = supertest('http://localhost:3000');
 
-describe('User', function () {
+describe('test_api', function () {
+    this.timeout(15000);
+    const str1 =  `<?xml version="1.0" encoding="UTF-8" ?>
+        <mcq-test-results>
+        <mcq-test-result scanned-on="2017-12-04T13:51:10+11:00">
+        <first-name>Jean</first-name>
+        <last-name>Stephanie</last-name>
+        <student-number>2398</student-number>
+        <test-id>9863</test-id>
+        <answer question="0" marks-available="1" marks-awarded="0">D</answer>
+        <answer question="1" marks-available="1" marks-awarded="1">D</answer>
+        <answer question="2" marks-available="1" marks-awarded="1">C</answer>
+        <answer question="3" marks-available="1" marks-awarded="0">A</answer>
+        <answer question="4" marks-available="1" marks-awarded="1">D</answer>
+        <answer question="5" marks-available="1" marks-awarded="0">A</answer>
+        <answer question="6" marks-available="1" marks-awarded="0">D</answer>
+        <answer question="7" marks-available="1" marks-awarded="0">C</answer>
+        <answer question="8" marks-available="1" marks-awarded="0">B</answer>
+        <answer question="9" marks-available="1" marks-awarded="1">B</answer>
+        <answer question="10" marks-available="1" marks-awarded="0">B</answer>
+        <answer question="11" marks-available="1" marks-awarded="0">D</answer>
+        <answer question="12" marks-available="1" marks-awarded="0">A</answer>
+        <answer question="13" marks-available="1" marks-awarded="1">C</answer>
+        <answer question="14" marks-available="1" marks-awarded="0">D</answer>
+        <answer question="15" marks-available="1" marks-awarded="1">C</answer>
+        <answer question="16" marks-available="1" marks-awarded="0">C</answer>
+        <answer question="17" marks-available="1" marks-awarded="0">C</answer>
+        <answer question="18" marks-available="1" marks-awarded="1">B</answer>
+        <answer question="19" marks-available="1" marks-awarded="1">C</answer>
+        <summary-marks available="20" obtained="8" />
+        </mcq-test-result>
+        </mcq-test-results>
+        `;
 
-    var location1;
-    var location2;
-    var location3;
-    var locations = [location1, location2, location3];
+    const res_1 = {
+        count : 1,
+        mean: 8,
+        p25: 40,
+        p50:40,
+        p75: 40
+    }
 
-    before(function (done) {
+    const str2 =  `<?xml version="1.0" encoding="UTF-8" ?>
+            <mcq-test-results>
+            <mcq-test-result scanned-on="2017-12-04T13:51:10+11:00">
+            <first-name>Jean</first-name>
+            <last-name>Stephanie</last-name>
+            <student-number>2398</student-number>
+            <test-id>9863</test-id>
+            <answer question="0" marks-available="1" marks-awarded="0">D</answer>
+            <answer question="1" marks-available="1" marks-awarded="1">D</answer>
+            <answer question="2" marks-available="1" marks-awarded="1">C</answer>
+            <answer question="3" marks-available="1" marks-awarded="0">A</answer>
+            <answer question="4" marks-available="1" marks-awarded="1">D</answer>
+            <answer question="5" marks-available="1" marks-awarded="0">A</answer>
+            <answer question="6" marks-available="1" marks-awarded="0">D</answer>
+            <answer question="7" marks-available="1" marks-awarded="0">C</answer>
+            <answer question="8" marks-available="1" marks-awarded="0">B</answer>
+            <answer question="9" marks-available="1" marks-awarded="1">B</answer>
+            <answer question="10" marks-available="1" marks-awarded="0">B</answer>
+            <answer question="11" marks-available="1" marks-awarded="0">D</answer>
+            <answer question="12" marks-available="1" marks-awarded="0">A</answer>
+            <answer question="13" marks-available="1" marks-awarded="1">C</answer>
+            <answer question="14" marks-available="1" marks-awarded="0">D</answer>
+            <answer question="15" marks-available="1" marks-awarded="1">C</answer>
+            <answer question="16" marks-available="1" marks-awarded="0">C</answer>
+            <answer question="17" marks-available="1" marks-awarded="0">C</answer>
+            <answer question="18" marks-available="1" marks-awarded="1">B</answer>
+            <answer question="19" marks-available="1" marks-awarded="1">C</answer>
+            <summary-marks available="20" obtained="20" />
+            </mcq-test-result>
+            <mcq-test-result scanned-on="2017-12-04T13:51:10+11:00">
+            <first-name>Jean</first-name>
+            <last-name>Stephanie</last-name>
+            <student-number>8</student-number>
+            <test-id>9863</test-id>
+            <answer question="0" marks-available="1" marks-awarded="0">D</answer>
+            <answer question="1" marks-available="1" marks-awarded="1">D</answer>
+            <answer question="2" marks-available="1" marks-awarded="1">C</answer>
+            <answer question="3" marks-available="1" marks-awarded="0">A</answer>
+            <answer question="4" marks-available="1" marks-awarded="1">D</answer>
+            <answer question="5" marks-available="1" marks-awarded="0">A</answer>
+            <answer question="6" marks-available="1" marks-awarded="0">D</answer>
+            <answer question="7" marks-available="1" marks-awarded="0">C</answer>
+            <answer question="8" marks-available="1" marks-awarded="0">B</answer>
+            <answer question="9" marks-available="1" marks-awarded="1">B</answer>
+            <answer question="10" marks-available="1" marks-awarded="0">B</answer>
+            <answer question="11" marks-available="1" marks-awarded="0">D</answer>
+            <answer question="12" marks-available="1" marks-awarded="0">A</answer>
+            <answer question="13" marks-available="1" marks-awarded="1">C</answer>
+            <answer question="14" marks-available="1" marks-awarded="0">D</answer>
+            <answer question="15" marks-available="1" marks-awarded="1">C</answer>
+            <answer question="16" marks-available="1" marks-awarded="0">C</answer>
+            <answer question="17" marks-available="1" marks-awarded="0">C</answer>
+            <answer question="18" marks-available="1" marks-awarded="1">B</answer>
+            <answer question="19" marks-available="1" marks-awarded="1">C</answer>
+            <summary-marks available="20" obtained="20" />
+            </mcq-test-result>
+            </mcq-test-results>
+            `;
 
-        api.post('/locations')
-            .set('Accept', 'application/x-www-form-urlencoded')
-            .send({
-                addressStreet: "111 Main St",
-                addressCity: "Portland",
-                addressState: "OR",
-                addressZip: "97209",
-                userId: 1
-            })
-            .expect('Content-Type', /json/)
-            .expect(200)
-            .end(function (err, res) {
-                location1 = res.body;
-            });
+    const res_2 = {
+        count : 2,
+        mean: 20,
+        p25: 100,
+        p50:100,
+        p75: 100
+    }
 
+    beforeEach(function (done) {
+      setTimeout(function(){
+        done();
+    }, 5000);
+    });
 
-        api.post('/locations')
-            .set('Accept', 'application/x-www-form-urlencoded')
-            .send({
-                addressStreet: "222 Main St",
-                addressCity: "Portland",
-                addressState: "OR",
-                addressZip: "97209",
-                userId: 2
-            })
-            .expect('Content-Type', /json/)
-            .expect(200)
-            .end(function (err, res) {
-                location2 = res.body;
-            });
-
-        api.post('/locations')
-            .set('Accept', 'application/x-www-form-urlencoded')
-            .send({
-                addressStreet: "333 Main St",
-                addressCity: "Portland",
-                addressState: "OR",
-                addressZip: "97209",
-                userId: 3
-            })
-            .expect('Content-Type', /json/)
-            .expect(200)
-            .end(function (err, res) {
-                location3 = res.body;
+    it("should delete the database", function(done){
+        api.get('/delete_database')
+            .end(function(error, res) {
                 done();
             });
     });
 
-    it('should return a 200 response', function (done) {
-        api.get('/users/1')
-            .set('Accept', 'application/json')
-            .expect(200, done);
-    });
-
-    it('should be an object with keys and values', function (done) {
-        api.get('/users/1')
-            .set('Accept', 'application/json')
+    it('should have updated the database with one test outcome', function(done){
+        api.post('/import')
+            .set('content-type', 'text/xml+markr')
+            .send(str1)
             .expect(200)
-            .end(function (err, res) {
-                expect(res.body).to.have.property("name");
-                expect(res.body.name).to.not.equal(null);
-                expect(res.body).to.have.property("email");
-                expect(res.body.email).to.not.equal(null);
-                expect(res.body).to.have.property("phoneNumber");
-                expect(res.body.phoneNumber).to.not.equal(null);
-                expect(res.body).to.have.property("role");
-                expect(res.body.role).to.not.equal(null);
+            .end(function(error, response, body) {
+                if (error) {
+                    done(error);
+                } else {
+                    done();
+                }
+            });
+    });
+
+    it('should return information about the record we just imported', function(done){
+        api.get('/results/9863/aggregate')
+            .end(function(error, res) {
+                expect(res.body).to.deep.equal(res_1);
                 done();
             });
     });
 
-    it('should have a 10 digit phone number', function (done) {
-        api.get('/users/1')
-            .set('Accept', 'application/json')
+    it('should have updated the database with 2 more outcomes', function(done){
+        api.post('/import')
+            .set('content-type', 'text/xml+markr')
+            .send(str2)
             .expect(200)
-            .end(function (err, res) {
-                expect(res.body.phoneNumber.length).to.equal(10);
+            .end(function(error, response, body) {
+                if (error) {
+                    done(error);
+                } else {
+                    done();
+                }
+            });
+    });
+
+    it('should return information about the test_id with only 2 outcomes', function(done){
+        api.get('/results/9863/aggregate')
+            .end(function(error, res) {
+                expect(res.body).to.deep.equal(res_2);
                 done();
             });
     });
 
-    it('should have the role of admin', function (done) {
-        api.get('/users/1')
-            .set('Accept', 'application/json')
-            .expect(200)
-            .end(function (err, res) {
-                expect(res.body.role).to.equal("admin");
+    it('should return information about the record we just imported', function(done){
+        api.get('/results/3/aggregate')
+            .end(function(error, res) {
+                expect(res.body).to.deep.equal({count:0});
                 done();
             });
     });
-
-    it('should be updated with a new name', function (done) {
-        api.put('/users/1')
-            .set('Accept', 'application/x-www-form-urlencoded')
-            .send({
-                name: "Kevin",
-                email: "kevin@example.com",
-                phoneNumber: "9998887777",
-                role: "editor"
-            })
-            .expect(200)
-            .end(function (err, res) {
-                expect(res.body.name).to.equal("Kevin");
-                expect(res.body.email).to.equal("kevin@example.com");
-                expect(res.body.phoneNumber).to.equal("9998887777");
-                expect(res.body.role).to.equal("editor");
-                done();
-            });
-    });
-
-    it('should access their own locations', function (done) {
-        api.get('/users/1/location')
-            .set('Accept', 'application/x-www-form-urlencoded')
-            .send({
-                userId: 1
-            })
-            .expect(200)
-            .end(function (err, res) {
-                expect(res.body.userId).to.equal(1);
-                expect(res.body.addressCity).to.equal("Portland");
-                done();
-            });
-    });
-
-
-    it('should not be able to access other users locations', function (done) {
-        api.get('/users/2/location')
-            .set('Accept', 'application/x-www-form-urlencoded')
-            .send({
-                userId: 1
-            })
-            .expect(401)
-            .end(function (err, res) {
-                if (err) return done(err);
-                expect(res.error.text).to.equal("Unauthorized");
-                done();
-            });
-    });
-
 });
-view rawuser_test.js hosted with ❤ by GitHub

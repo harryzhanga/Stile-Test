@@ -96,10 +96,14 @@ First we need the relevant dependencies.
 npm init
 npm install express --save
 npm install body-parser --save
-npm install mongodb -- save
+npm install mongodb --save
 npm install express-xml-bodyparser --save
 npm install simple-node-logger --save
 npm install --save express body-parser body-parser-xml
+npm install mocha --save
+npm install --save-dev mocha
+npm install chai --save
+npm install supertest --save
 ```
 
 Running the server
@@ -112,6 +116,10 @@ We also install Postman to simulate the requests
 - To simulate incoming information, create a POST request. URL: `localhost:3000/import/` and under "Body", modify the "raw" value. Copy and paste in the XML document sample_results.xml . Remember to also change the `content-type` to `text/xml+markr`.
 - To simulate a GET request, change to GET in Postman. Use the URL: `localhost:3000/results/9863/aggregate`
 - This should return an acceptable response.
+
+## Testing
+To test, just run `npm test`
+There are 6 tests currently
 
 ## Known issues
 For each updated available marks we need to ripple down the new available marks to every single test that has the same test_id.
