@@ -9,7 +9,7 @@ var express = require('express'),
     server = http.createServer(app),
     xmlparser = require('express-xml-bodyparser');
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 app.use(xmlparser());
 
 //handle posting of the xml file
@@ -28,9 +28,9 @@ app.post('/import', function(req, res, next) {
 
 
 //reading from the database and returning the json
-app.get('/results/:test_id/aggregate', (req, res) => {
-    let test_id = req.params.test_id;
-    fetch.get_test_info(test_id, res);
+app.get('/results/:test_id/aggregate', async (req, res) => {
+    let test_id = parseInt(req.params.test_id);
+    fetch.send_test_info(test_id, res);
 });
 
 app.listen(3000);

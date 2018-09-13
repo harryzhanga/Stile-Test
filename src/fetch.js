@@ -29,13 +29,16 @@ var getMean = function(scores){
     return sum/scores.length;
 }
 
-get_statistics = function(arr){
+//takes the array of test scores and returns an object of statistics about it
+get_statistics = arr => {
     let scores = [];
     let available;
     for(const result of arr){
         scores.push(result["obtained"]);
         available = result["available"];
     }
+
+    //If there are no test scores for this test, then we can't find quantiles etc...
     if(scores.length === 0){
         return{
             "count":0
@@ -51,17 +54,15 @@ get_statistics = function(arr){
 }
 
 
-exports.get_test_info = function(test_id, res){
+//Function to take in the test id, calculate the test statistics and send them
+exports.send_test_info = (test_id, res) => {
     var MongoClient = require('mongodb').MongoClient;
     var url = 'mongodb+srv://harry:harry@cluster0-rxnck.mongodb.net/test?retryWrites=true';
-    var res;
-    return MongoClient.connect(url, function(err, client){
+    MongoClient.connect(url, { useNewUrlParser: true }, async (err, client) => {
         if (err) throw err;
         const collection = client.db("stile").collection("tests");
         const query = {"test-id" : test_id};
-        collection.find().toArray()
-            .then(data => {
-                res.json(get_statistics(data));
-            });
+        const data = await collection.find(query).toArray();
+        res.json(get_statistics(data));
     });
 }
