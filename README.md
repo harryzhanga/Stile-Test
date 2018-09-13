@@ -97,6 +97,9 @@ First we need the relevant dependencies.
 - npm install body-parser --save
 - npm install mongodb -- save
 - npm install express-xml-bodyparser --save
+- npm install simple-node-logger --save
+- npm install --save express body-parser body-parser-xml
+
 
 Running the server
 - In the terminal, go to the src directory and type in: node server.js
@@ -105,6 +108,12 @@ Running the server
 We also install Postman to simulate the requests
 - Install Postman by going to the website or google searching
 - In Postman, you can simulate a POST or GET request.
-- To simulate incoming information, create a POST request. URL: localhost:3000/import/ and under "Body", modify the "raw" value. Copy and paste in the XML document sample_results.xml
+- To simulate incoming information, create a POST request. URL: localhost:3000/import/ and under "Body", modify the "raw" value. Copy and paste in the XML document sample_results.xml . Remember to also change the content-type to text/xml+markr.
 - To simulate a GET request, change to GET in Postman. Use the URL: localhost:3000/results/9863/aggregate
 - This should return an acceptable response.
+
+## Known issues
+For each updated available marks we need to ripple down the new available marks to every single test that has the same test_id.
+
+## TODO
+Automated Testing
