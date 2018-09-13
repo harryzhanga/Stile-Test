@@ -92,24 +92,25 @@ A basic mongoDB instance was created for this (should be free tier) which stores
 ## Build and run instructions
 First we need the relevant dependencies.
 - install node.js from the web by Google searching for it
-- initiate npm by going to terminal and typing in the command: npm init
-- install express.js by going to the terminal and typing in the command: npm install express --save
-- npm install body-parser --save
-- npm install mongodb -- save
-- npm install express-xml-bodyparser --save
-- npm install simple-node-logger --save
-- npm install --save express body-parser body-parser-xml
-
+```
+npm init
+npm install express --save
+npm install body-parser --save
+npm install mongodb -- save
+npm install express-xml-bodyparser --save
+npm install simple-node-logger --save
+npm install --save express body-parser body-parser-xml
+```
 
 Running the server
-- In the terminal, go to the src directory and type in: node server.js
+- In the terminal, go to the src directory and type in: `node server.js`
 - This will start the server.
 
 We also install Postman to simulate the requests
 - Install Postman by going to the website or google searching
 - In Postman, you can simulate a POST or GET request.
-- To simulate incoming information, create a POST request. URL: localhost:3000/import/ and under "Body", modify the "raw" value. Copy and paste in the XML document sample_results.xml . Remember to also change the content-type to text/xml+markr.
-- To simulate a GET request, change to GET in Postman. Use the URL: localhost:3000/results/9863/aggregate
+- To simulate incoming information, create a POST request. URL: `localhost:3000/import/` and under "Body", modify the "raw" value. Copy and paste in the XML document sample_results.xml . Remember to also change the `content-type` to `text/xml+markr`.
+- To simulate a GET request, change to GET in Postman. Use the URL: `localhost:3000/results/9863/aggregate`
 - This should return an acceptable response.
 
 ## Known issues
