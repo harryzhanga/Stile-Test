@@ -1,3 +1,8 @@
+const log = require('simple-node-logger').createSimpleLogger('project.log');
+
+
+
+
 exports.clean_xml_tests = function(file){
     //returns false is the xml file is not valid (missing fields)
     //otherwise returns a cleaned version of the tests
@@ -7,7 +12,7 @@ exports.clean_xml_tests = function(file){
     for(const result of file["mcq-test-result"]){
         //check if any of the fields are missing
         if(!result["student-number"] || !result["test-id"] || !result["summary-marks"]){
-            console.log("Issue with incoming xml file, no student number, test id or summary marks");
+            log.error('Issue with test outcome, no student-number, test-id or summary-marks');
             return false;
         }
 
@@ -16,7 +21,7 @@ exports.clean_xml_tests = function(file){
 
         //also check for fields that should be in the test object
         if(!test_info["available"] || !test_info["obtained"]){
-            console.log("Issue with incoming xml file");
+            log.error('Issue with test outcome, no available or obtained field');
             return false;
         }
 
@@ -38,10 +43,12 @@ add_to_database = async (test, collection) => {
     var test_outcome = await collection.find(query).toArray();
     //unseen test outcome so insert into database
     if(test_outcome.length === 0){
+        log.info('Inserting into the database', test);
         collection.insertOne(test);
     }
     //we have have seen it before so update it
     else{
+        log.info('Updating the database ', test);
         collection.updateOne({
             "test-id": test["test-id"],
             "student-number":test["student-number"]
@@ -68,6 +75,7 @@ exports.update_database = function(tests){
         //for each result that is given
         for(const test of tests){
             if (err) throw err;
+
             add_to_database(test, collection);
         };
 

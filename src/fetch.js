@@ -1,3 +1,5 @@
+const log = require('simple-node-logger').createSimpleLogger('project.log');
+
 /////////////////////////////////////////////////////
 //  Taken from StackOverflow
 
@@ -30,14 +32,14 @@ var getMean = function(scores){
 }
 
 //takes the array of test scores and returns an object of statistics about it
-get_statistics = arr => {
+get_statistics = (arr, test_id) => {
     let scores = [];
     let available;
     for(const result of arr){
         scores.push(result["obtained"]);
         available = result["available"];
     }
-
+    log.info('Test of ID ', test_id, ' has the following scores', scores, " and available marks: ",available);
     //If there are no test scores for this test, then we can't find quantiles etc...
     if(scores.length === 0){
         return{
@@ -63,6 +65,8 @@ exports.send_test_info = (test_id, res) => {
         const collection = client.db("stile").collection("tests");
         const query = {"test-id" : test_id};
         const data = await collection.find(query).toArray();
-        res.json(get_statistics(data));
+        const response = get_statistics(data, test_id);
+        log.info("Calculating response for test_id ", test_id, " ", response);
+        res.json(response);
     });
 }
